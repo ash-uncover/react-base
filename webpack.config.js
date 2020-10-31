@@ -1,77 +1,59 @@
-const path = require('path');
+/* eslint-disable */
 
-const paths = {
-    DIST: path.resolve(__dirname, 'dist'),
-    NODE_MODULES: path.resolve(__dirname, 'node_modules'),
-    SRC: path.resolve(__dirname, 'src')
-}
-
-const webpack = require('webpack');
+var path = require('path')
+var node_modules = path.resolve(__dirname, 'node_modules')
+var pathToReact = path.resolve(node_modules, 'react/dist/react.min.js')
 
 module.exports = {
 
-    entry: path.join(paths.SRC, 'index.jsx'),
+  entry: path.resolve(__dirname, './src/index.js'),
+  devtool: 'source-map',
+  output: {
+    path: path.resolve(__dirname, 'build'),
+    filename: 'bundle.js'
+  },
 
-    output: {
-        path: paths.DIST,
-        filename: 'bundle.js'
-    },
+  devServer: {
+    host: '0.0.0.0',
+    historyApiFallback: true,
+    port: 8000,
+    disableHostCheck: true
+  },
 
-    plugins: [
-         new webpack.ProvidePlugin({
-            jQuery: 'jquery',
-            $: 'jquery'
-        })
-    ],
+  resolve: {
+    modules: ['node_modules', './src'],
+    extensions: ['.js', '.jsx']
+  },
 
-    devServer: {
-        host: '0.0.0.0',
-        historyApiFallback: true,
-        port: 8080
-    },
+  plugins: [],
 
-    resolve: {
-        modules: ['node_modules', './src'],
-        extensions: ['.js', '.jsx']
-    },
-
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                use: [ 'babel-loader' ]
-            },
-            { 
-                test: /node_modules\/jquery\/.+\.(jsx|js)$/,
-                loader: 'imports-loader?jQuery=jquery,$=jquery,this=>window'
-            },
-            { 
-                test: /\.css$/, 
-                loader: 'style-loader!css-loader'
-            },
-            { 
-                test: /\.(png|jpg)$/, 
-                loader: 'file-loader?name=images/[name].[ext]'
-            },
-            {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, 
-                loader: 'url-loader?mimetype=application/vnd.ms-fontobject'
-            },
-            {
-                test: /\.woff/,
-                loader: 'url-loader?mimetype=application/font-woff'
-            }, {
-                test: /\.woff2/,
-                loader: 'url-loader?mimetype=application/font-woff2'
-            },
-            { 
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, 
-                loader: 'url-loader?mimetype=application/x-font-ttf'
-            },
-            { 
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, 
-                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
-            }
+  module: {
+    rules: [
+      {
+        test: /.(jsx|js)$/,
+        use: 'babel-loader'
+      },
+      {
+        test: /\.(scss|css)$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'sass-loader' }
         ]
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader?name=images/[name].[ext]',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/images/'
+            }
+          }
+        ]
+      }
+    ],
+    noParse: [pathToReact]
   },
 };
