@@ -6,9 +6,7 @@
     "test": "jest",
     "test-coverage": "jest --collectCoverage",
     "test-update": "jest --updateSnapshot",
-    "watch": "webpack-dev-server --progress --colors --history-api-fallback --mode development",
-    "watch2": "webpack serve --config webpack.config.js --progress --mode development",
-    "build": "webpack"
+    "watch": "webpack serve --config webpack.config.js --progress --mode development"
   },
   "dependencies": {
     "i18next": "^19.8.3",
